@@ -6,7 +6,10 @@ use serde::Deserialize;
 
 
 
-fn run_aqua(name: String) -> String {
+
+// fn read_ipfs()
+
+async fn run_aqua(name: String) -> String {
     let aqua_dir = PathBuf::from("./aqua");
     let aqua_path = fs::canonicalize(&aqua_dir).unwrap();
     let cmd = format!("fluence run -i {} -f 'helloWorld(\"{}\")' --env=kras", aqua_path.display().to_string(), name);
@@ -33,7 +36,7 @@ struct AquaData {
 #[get("/")]
 async fn index(info: web::Query<AquaData>) -> String {
     let info = info.into_inner();
-    let res = run_aqua(info.hello_param);
+    let res = run_aqua(info.hello_param).await;
     format!("aqua helloWorld response: {}", res)
 }
 
